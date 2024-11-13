@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.postGre.bsHive.jwMapper">
+ 
+ 	<select id="selectUserTable" parameterType="int" resultType="User_Table">
+ 		SELECT	"UNQ_NUM"
+ 		FROM	"EMP"
+ 		WHERE	"UNQ_NUM" = CAST(#{unqNum} AS INTEGER)
+
+ 	</select>
+
+ 	<insert id="insertOnln_Lctr" parameterType="Onln_Lctr">
+ 		INSERT into "ONLN_LCTR"(
+ 							"LCTR_NUM",
+ 							"LCTR_EXPLN",
+ 							"LCTR_DATA",
+ 							"BGNG_YMD",
+ 							"END_YMD",
+ 							"RCRT_NOPE",
+ 							"FNSH_CRTR",
+ 							"UNQ_NUM2"
+ 						  )
+	 
+ 		VALUES (
+ 				 #{lctr_num},
+ 				 #{lctr_expln},
+ 				 #{lctr_data},
+ 				 #{bgng_ymd},
+ 				 #{end_ymd},
+ 				 #{rcrt_nope},
+ 				 #{fnsh_crtr},
+ 				 #{unq_num2}		
+ 			   )
+ 	</insert>
+ 	
+ 	
+ 	<select id="selLctrNum" resultType="Integer">
+ 		SELECT		o."LCTR_NUM"
+		FROM		"ONLN_LCTR" o
+		LEFT JOIN 	"SYLLABUS_UNIT" s ON o."LCTR_NUM" = s."LCTR_NUM"
+		WHERE 		s."LCTR_NUM" IS NULL;
+ 	</select>
+ 	 	
+ 	
+ 	<insert id="insertCont" parameterType="Syllabus_Unit">
+ 		INSERT into "SYLLABUS_UNIT" (
+ 								  "UNIT_NUM",
+ 								  "LCTR_NUM",
+ 								  "VDO_ID",
+ 								  "CONTS_NM",
+ 								  "PLAY_HR"
+ 								  )
+ 		VALUES (
+ 				(CAST(#{unit_num} AS TEXT) || CAST(nextval('syllabus_unit_unit_num_seq') AS TEXT))::integer,
+ 				#{lctr_num}, 
+ 				#{vdo_id},
+ 				#{conts_nm},
+ 				#{play_hr}
+ 				)
+ 	
+ 	</insert>
+ 
+ 
+ 
+ </mapper>
